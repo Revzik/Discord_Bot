@@ -1,0 +1,23 @@
+{
+  "name": "discord_bot",
+  "version": "1.0.0",
+  "description": "A simple bot for discord server :)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Revzik/Discord_Bot.git"
+  },
+  "author": "Revzik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Revzik/Discord_Bot/issues"
+  },
+  "homepage": "https://github.com/Revzik/Discord_Bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0"
+  }
+}
