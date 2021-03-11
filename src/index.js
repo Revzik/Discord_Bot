@@ -6,12 +6,17 @@ const Discord = require('discord.js');
 var bot = new Discord.Client();
 bot.login(TOKEN);
 
-var commandHandler = require('./command_handler');
+var config = require(__dirname + '/config/command.json');
+const CommandListener = require('./listeners/command');
+var commandListener = new CommandListener(config);
 
-bot.on('ready', () => {
+const ReplyService = require('./services/reply');
+var replyService = new ReplyService(config, commandListener);
+
+bot.once('ready', () => {
     console.info(`Logged in as ${bot.user.tag}!`);
 });
 
 bot.on('message', msg => {
-    commandHandler.processMessage(msg);
+    commandListener.processMessage(msg);
 });

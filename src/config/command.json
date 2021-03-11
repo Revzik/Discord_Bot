@@ -1,0 +1,55 @@
+{
+    "prefix": "papaj",
+    "replies": {
+        "unknown": [
+            "Co?",
+            "Cooooo?"
+        ],
+        "generic": [
+            "Bądźmy łagodni",
+            "Można powiedzieć, że to jest, jakby to powiedzieć, okrutnik no po prostu",
+            "Tak jak Pan Jezus powiedział",
+            "A jak Pan Jezus powiedział?",
+            "Tak jak wszyscy chłopcy wtedy",
+            "Nie mogę powiedzieć żebym ich nie lubił",
+            "Szpinak? Jak mi dadzą to jem",
+            "A to ja nie wiem. To które jem",
+            "Żadnej dobrej sztuki nie napisałem",
+            "Czasem myśmy się nawet bili. Najwięcej tośmy kopali w piłkę",
+            "Może nawet z dziewczynkami też",
+            "Nie łowiłem niestety"
+        ],
+        "positive": [
+            "A można, jak najbardziej... Jeszcze jak!",
+            "Jeszcze jak!",
+            "No",
+            "Tak",
+            "Tak jest",
+            "Jest możliwe",
+            "Bardzo",
+            "Tak, tak, ale ja dzisiaj jeszcze muszę wrócić do Rzymu"
+        ],
+        "neutral": [
+            "Co mam robić?",
+            "Nie wiem",
+            "Nie wiem nic o takiej gumie"
+        ],
+        "negative": [
+            "Nie",
+            "Nie. Jak dotąd nie, bo mi nie pokazali",
+            "Takiego prawdziwego to nie",
+            "Dość"
+        ],
+        "choice": [
+            "Po co mam wybierać? Najlepiej zabrać obie :D",
+            "Nie wiem czy lubię czy nie lubię, bo mi nie dali nigdy",
+            "Z warkoczymami, bez warkoczyków - też ujdą!"
+        ],
+        "where": [
+            "Już Pan Prezydent Wałęsa czeka z rządem na lotnisku!",
+            "A któżby go przenosił, taki ciężki",
+            "A w Polsce mi się wszystko podoba. Polska mi się podoba",
+            "Na Wiślanej? Tak, tam mieszkałem nie raz. U sióstr szarych Urszulanek. One to wiedzą najlepiej. Idźcie do nich, to Wam powiedzą wszystko dokładnie"
+        ]
+    } 
+}
