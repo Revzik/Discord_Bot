@@ -26,8 +26,6 @@ class ReplyService {
     reply(channel, question) {
         if (question[0] === '') {
             this.sendMessage(channel, UNKNOWN);
-        } else if (this.isChoiceQuestion(question)) {
-            this.sendMessage(channel, CHOIE);
         } else if (this.isYesNo(question)) {
             var answer = Math.floor(Math.random() * 3);
             if (answer === 0) {
@@ -37,6 +35,8 @@ class ReplyService {
             } else {
                 this.sendMessage(channel, NEGATIVE);
             }
+        } else if (this.isChoiceQuestion(question)) {
+            this.sendMessage(channel, CHOIE);
         } else if (this.isWhereQuestion(question)) {
             this.sendMessage(channel, WHERE);
         } else {
