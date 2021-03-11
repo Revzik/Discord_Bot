@@ -1,4 +1,7 @@
-FROM node:14-alpine
+# windows (arm64)
+# FROM node:14-alpine
+# raspberry (arm v7)
+FROM arm32v7/node:14-alpine
 
 WORKDIR /usr/app
 
