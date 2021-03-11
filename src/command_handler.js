@@ -1,6 +1,6 @@
 "use strict";
 
-const CH_CONFIG = __dirname + "/conf/command_config.json";
+const CH_CONFIG = __dirname + "/command_config.json";
 const REPLY_GENERIC = "generic";
 
 var config = require(CH_CONFIG);
