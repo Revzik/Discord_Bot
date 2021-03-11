@@ -108,3 +108,5 @@ tmp/
 
 # vscode
 .vscode/
+
+docker-compose.yml

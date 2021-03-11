@@ -8,7 +8,7 @@ WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install
 
-COPY src/* src/
+COPY src/ src/
 
 ARG TOKEN
 ENV TOKEN=$TOKEN
