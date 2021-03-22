@@ -2,7 +2,7 @@
 
 const Emmiter = require('events');
 
-class CommandListener extends Emmiter {
+class CommandHandler extends Emmiter {
 
     constructor(config) {
         super();
@@ -10,16 +10,24 @@ class CommandListener extends Emmiter {
         this.reload(config);
 
         const REPLY = 'reply';
+        const REQUEST_MEME = 'meme';
     }
     
     reload(config) {
         this.prefix = config.prefix.toLowerCase();
+        this.replies = config.replies;
     }
 
     processMessage(message) {
         var command = this.filter(message);
         if (command === null) {
             return;
+        }
+        
+        if (this.isRequest(command)) {
+            if (this.isMemeRequest(command)) {
+                this.emit(this.REQUEST_MEME, message.channel);
+            }
         }
 
         this.emit(this.REPLY, message.channel, command);
@@ -36,6 +44,14 @@ class CommandListener extends Emmiter {
 
         return command;
     }
+
+    isRequest(command) {
+        return this.requests.includes(command[0]);
+    }
+
+    isMemeRequest(command) {
+        return this.requests.includes(command[1]);
+    }
 }
 
-module.exports = CommandListener;
+module.exports = CommandHandler;

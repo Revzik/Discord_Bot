@@ -1,5 +1,29 @@
 {
     "prefix": "papaj",
+    "requests": {
+        "base": [
+            "daj",
+            "kopsnij",
+            "zapodaj",
+            "wrzuć",
+            "wrzuc",
+            "zarzuć",
+            "zarzuc",
+            "podeślij",
+            "podeslij",
+            "wyslij",
+            "wyślij"
+        ],
+        "meme": [
+            "mema",
+            "mem",
+            "memuch",
+            "memucha",
+            "cenzo",
+            "cenzopape",
+            "cenzopapę"
+        ]
+    },
     "replies": {
         "unknown": [
             "Co?",
