@@ -10,13 +10,16 @@ const config = require(__dirname + '/../config/command.json');
 const listener = require(__dirname + '/../handlers/command');
 
 function reload(config) {
-    replies = {};
+    var replies = {};
+    
     for (const [key, value] of Object.entries(config.replies)) {
         replies[key] = value;
     }
+
+    return replies;
 }
 
-replies = reload(config);
+var replies = reload(config);
 
 function reply(channel, question) {
     console.log(question);
