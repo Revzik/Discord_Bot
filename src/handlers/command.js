@@ -1,6 +1,7 @@
 'use strict';
 
 const Emmiter = require('events');
+const config = require(__dirname + '/../config/command.json');
 
 class CommandHandler extends Emmiter {
 
@@ -9,13 +10,14 @@ class CommandHandler extends Emmiter {
 
         this.reload(config);
 
-        const REPLY = 'reply';
-        const REQUEST_MEME = 'meme';
+        this.REPLY = 'reply';
+        this.REQUEST_MEME = 'meme';
     }
     
     reload(config) {
         this.prefix = config.prefix.toLowerCase();
         this.replies = config.replies;
+        this.requests = config.requests;
     }
 
     processMessage(message) {
@@ -28,9 +30,9 @@ class CommandHandler extends Emmiter {
             if (this.isMemeRequest(command)) {
                 this.emit(this.REQUEST_MEME, message.channel);
             }
+        } else {
+            this.emit(this.REPLY, message.channel, command);
         }
-
-        this.emit(this.REPLY, message.channel, command);
     }
 
     filter(message) {
@@ -46,12 +48,12 @@ class CommandHandler extends Emmiter {
     }
 
     isRequest(command) {
-        return this.requests.includes(command[0]);
+        return this.requests['base'].includes(command[0]);
     }
 
     isMemeRequest(command) {
-        return this.requests.includes(command[1]);
+        return this.requests['meme'].includes(command[1]);
     }
 }
 
-module.exports = CommandHandler;
+module.exports = new CommandHandler(config);

@@ -1,13 +1,17 @@
-'use strict';
+const config = require(__dirname + '/../config/paths.json');
+const listener = require(__dirname + '/../handlers/command');
+const { loadRandom } = require(__dirname + '/../data/image');
 
-class MemeService {
-
-    constructor(config, listener) {
-        this.listener = listener;
-        listener.on(listener.REQUEST_MEME, this.reply.bind(this));
-    }
-
-    reply()
+function reload(config) {
+    return __dirname + '/../../' + config['memeDir'];
 }
 
-module.exports = MemeService;
+path = reload(config);
+
+function getMemeLocal(channel) {
+    console.log(loadRandom(path));
+}
+
+listener.on(listener.REQUEST_MEME, getMemeLocal)
+
+module.exports = reload(config);
