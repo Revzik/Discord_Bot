@@ -63,4 +63,4 @@ function sendMessage(channel, type) {
 
 listener.on(listener.REPLY, reply);
 
-module.exports = reload(config);
+module.exports = reload;
