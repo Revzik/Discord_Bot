@@ -26,10 +26,8 @@ class CommandHandler extends Emmiter {
             return;
         }
         
-        if (this.isRequest(command)) {
-            if (this.isMemeRequest(command)) {
-                this.emit(this.REQUEST_MEME, message.channel);
-            }
+        if (this.isRequest(command) && this.isMemeRequest(command)) {
+            this.emit(this.REQUEST_MEME, message.channel);
         } else {
             this.emit(this.REPLY, message.channel, command);
         }

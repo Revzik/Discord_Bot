@@ -10,6 +10,8 @@ RUN npm install
 
 COPY src/ src/
 
+COPY images/ images/
+
 ARG TOKEN
 ENV TOKEN=$TOKEN
 
