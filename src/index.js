@@ -1,5 +1,6 @@
 require('dotenv').config();
-const Discord = require('discord.js');
+
+var bot = require('./bot');
 
 const commandHandler = require('./handlers/command');
 require('./services/reply');
@@ -7,7 +8,6 @@ require('./services/meme');
 
 const TOKEN = process.env.TOKEN;
 
-var bot = new Discord.Client();
 bot.login(TOKEN);
 
 bot.once('ready', () => {
