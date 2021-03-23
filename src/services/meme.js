@@ -8,10 +8,21 @@ function reload(config) {
 
 path = reload(config);
 
-function getMemeLocal(channel) {
-    console.log(loadRandom(path));
+function sendMeme(channel) {
+    sendMemeLocal(channel);
 }
 
-listener.on(listener.REQUEST_MEME, getMemeLocal)
+function sendMemeLocal(channel) {
+    image = loadRandom(path);
+
+    channel.send({
+        files: [{
+            attachment: image.path,
+            name: image.name
+        }]
+    });
+}
+
+listener.on(listener.REQUEST_MEME, sendMemeLocal)
 
 module.exports = reload(config);
