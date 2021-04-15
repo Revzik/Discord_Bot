@@ -9,14 +9,17 @@ const WHERE = 'where';
 
 const config = require(__dirname + '/../config/bot/command.json');
 const listener = require(__dirname + '/../handlers/command');
+const logger = require(__dirname + '/../config/log/logger.js').createLogger(__filename);
 
 function reload(config) {
+    logger.info('Loading meme service...');
     var replies = {};
 
     for (const [key, value] of Object.entries(config.replies)) {
         replies[key] = value;
     }
 
+    logger.info('Successfully loaded meme service!');
     return replies;
 }
 

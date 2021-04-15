@@ -1,22 +1,27 @@
 // application initialization and config
+var bot = require(__dirname + '/bot');
+
 // logging configuration
-const loggerConfig = require(__dirname + '/config/log/winston.json');
+const logger = require(__dirname + '/config/log/logger.js').createLogger(__filename);
+logger.info('Starting bot...');
 
 // setup services
+logger.info('Configuring services...');
 const commandHandler = require(__dirname + '/handlers/command');
 require(__dirname + '/services/reply');
 require(__dirname + '/services/meme');
+logger.info('Succesfully configured services!');
 
 // setup bot token
 const TOKEN = process.env.TOKEN;
 require('dotenv').config();
 
 // setup bot and its listeners
-var bot = require(__dirname + '/bot');
+logger.info('Logging in...');
 bot.login(TOKEN);
 
 bot.once('ready', () => {
-    console.info(`Logged in as ${bot.user.tag}!`);
+    logger.info(`Logged in as ${bot.user.tag}!`);
 });
 
 bot.on('message', msg => {

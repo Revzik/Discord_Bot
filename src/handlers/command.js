@@ -3,6 +3,7 @@
 // it sends an appriopriate response async
 const Emmiter = require('events');
 const config = require(__dirname + '/../config/bot/command.json');
+const logger = require(__dirname + '/../config/log/logger.js').createLogger(__filename);
 
 // main class to deal with incomming messages
 class CommandHandler extends Emmiter {
@@ -17,9 +18,11 @@ class CommandHandler extends Emmiter {
     }
     
     reload(config) {
+        logger.info('Loading commands...');
         this.prefix = config.prefix.toLowerCase();
         this.replies = config.replies;
         this.requests = config.requests;
+        logger.info('Successfully loaded commands!');
     }
 
     // main function which filters out the messages which are not commands
@@ -29,10 +32,13 @@ class CommandHandler extends Emmiter {
         if (command === null) {
             return;
         }
-        
+
+        logger.debug(`Received message: ${command}`);        
         if (this.isRequest(command) && this.isMemeRequest(command)) {
+            logger.info('Message received, sending meme');
             this.emit(this.REQUEST_MEME, message.channel);
         } else {
+            logger.info('Message received, sending generic response');
             this.emit(this.REPLY, message.channel, command);
         }
     }
