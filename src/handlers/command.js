@@ -1,10 +1,12 @@
-'use strict';
-
+// this file contains the heart of the bot which is CommandHandler
+// it acts as a message broker and based on the message body
+// it sends an appriopriate response async
 const Emmiter = require('events');
-const config = require(__dirname + '/../config/command.json');
+const config = require(__dirname + '/../config/bot/command.json');
 
+// main class to deal with incomming messages
 class CommandHandler extends Emmiter {
-
+    
     constructor(config) {
         super();
 
@@ -20,6 +22,8 @@ class CommandHandler extends Emmiter {
         this.requests = config.requests;
     }
 
+    // main function which filters out the messages which are not commands
+    // and sends apriopriate response
     processMessage(message) {
         var command = this.filter(message);
         if (command === null) {
@@ -33,6 +37,7 @@ class CommandHandler extends Emmiter {
         }
     }
 
+    // filter the messages which don't begin with bot prefix
     filter(message) {
         var content = message.content.toLowerCase().trim();
         if (message.author.bot || !content.startsWith(this.prefix)) {
@@ -45,6 +50,7 @@ class CommandHandler extends Emmiter {
         return command;
     }
 
+    // helper methods
     isRequest(command) {
         return this.requests['base'].includes(command[0]);
     }
