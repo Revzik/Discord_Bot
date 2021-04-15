@@ -1,7 +1,9 @@
+// theese functions are used to send meme replies to the channels
+// and send a scheduled meme based on crontab
 const CronJob = require('cron').CronJob;
 
-const paths = require(__dirname + '/../config/paths.json');
-const schedules = require(__dirname + '/../config/schedules.json');
+const paths = require(__dirname + '/../config/bot/paths.json');
+const schedules = require(__dirname + '/../config/bot/schedules.json');
 const listener = require(__dirname + '/../handlers/command');
 const { loadRandom } = require(__dirname + '/../data/image');
 const bot = require(__dirname + '/../bot');
@@ -18,6 +20,7 @@ function reload(paths, schedules) {
     return config;
 }
 
+// crontab scheduler
 function scheduleMeme(schedule, targetChannel) {
     var cronTime = `${schedule.second} ${schedule.minute} ${schedule.hour} ${schedule.dayOfMonth} ${schedule.month} ${schedule.dayOfWeek}`
 
@@ -29,8 +32,7 @@ function scheduleMeme(schedule, targetChannel) {
     job.start();
 }
 
-config = reload(paths, schedules);
-
+// main functions - for now just from a local directory
 function sendMeme(channel) {
     sendMemeLocal(channel);
 }
@@ -45,6 +47,9 @@ function sendMemeLocal(channel) {
         }]
     });
 }
+
+// setup the modules
+config = reload(paths, schedules);
 
 listener.on(listener.REQUEST_MEME, sendMeme)
 

@@ -1,3 +1,4 @@
+// this module is used to handle generic and non-command messages sent to the bot
 const UNKNOWN = 'unknown';
 const GENERIC = 'generic';
 const POSITIVE = 'positive';
@@ -6,12 +7,12 @@ const NEGATIVE = 'negative';
 const CHOIE = 'choice';
 const WHERE = 'where';
 
-const config = require(__dirname + '/../config/command.json');
+const config = require(__dirname + '/../config/bot/command.json');
 const listener = require(__dirname + '/../handlers/command');
 
 function reload(config) {
     var replies = {};
-    
+
     for (const [key, value] of Object.entries(config.replies)) {
         replies[key] = value;
     }
@@ -19,10 +20,8 @@ function reload(config) {
     return replies;
 }
 
-var replies = reload(config);
-
+// function to reply to non-command messages
 function reply(channel, question) {
-    console.log(question);
     if (question[0] === '') {
         sendMessage(channel, UNKNOWN);
     } else if (isYesNo(question)) {
@@ -43,6 +42,7 @@ function reply(channel, question) {
     }
 }
 
+// helper functions
 function isYesNo(question) {
     return (question[0] === 'czy' || 
             (question[1] === 'czy' &&
@@ -63,6 +63,9 @@ function isWhereQuestion(question) {
 function sendMessage(channel, type) {
     channel.send(replies[type][Math.floor(Math.random() * replies[type].length)]);
 }
+
+// setup the module
+var replies = reload(config);
 
 listener.on(listener.REPLY, reply);
 
