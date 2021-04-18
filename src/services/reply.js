@@ -12,22 +12,24 @@ const listener = require(__dirname + '/../handlers/command');
 const logger = require(__dirname + '/../config/log/logger.js').createLogger(__filename);
 
 function reload(config) {
-    logger.info('Loading meme service...');
+    logger.info('Loading reply service...');
     var replies = {};
 
     for (const [key, value] of Object.entries(config.replies)) {
         replies[key] = value;
     }
 
-    logger.info('Successfully loaded meme service!');
+    logger.info('Successfully loaded reply service!');
     return replies;
 }
 
 // function to reply to non-command messages
 function reply(channel, question) {
     if (question[0] === '') {
+        logger.debug("No message content, sending unknown");
         sendMessage(channel, UNKNOWN);
     } else if (isYesNo(question)) {
+        logger.debug("Yes/no question detected, sending response");
         var answer = Math.floor(Math.random() * 3);
         if (answer === 0) {
             sendMessage(channel, POSITIVE);
@@ -37,10 +39,13 @@ function reply(channel, question) {
             sendMessage(channel, NEGATIVE);
         }
     } else if (isChoiceQuestion(question)) {
+        logger.debug("Choice question detected, sending response");
         sendMessage(channel, CHOIE);
     } else if (isWhereQuestion(question)) {
+        logger.debug("Place question detected, sending response");
         sendMessage(channel, WHERE);
     } else {
+        logger.debug("Generic question detected, sending response");
         sendMessage(channel, GENERIC);
     }
 }

@@ -15,7 +15,7 @@ function createLogger(namespace) {
             }),
             winston.format.timestamp(),
             winston.format.printf((info) => {
-                return `${info.timestamp} - ${info.label}:[${info.level}]: ${info.message}`;
+                return `${info.timestamp} - [${info.level}]:${info.label}: ${info.message}`;
             })
         )
     };

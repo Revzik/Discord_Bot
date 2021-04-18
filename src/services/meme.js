@@ -38,6 +38,7 @@ function scheduleMeme(schedule, targetChannel) {
 
 // main functions - for now just from a local directory
 function sendMeme(channel) {
+    logger.debug("No online sources, sending local meme");
     sendMemeLocal(channel);
 }
 

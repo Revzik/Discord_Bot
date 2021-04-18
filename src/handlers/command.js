@@ -32,13 +32,12 @@ class CommandHandler extends Emmiter {
         if (command === null) {
             return;
         }
-
-        logger.debug(`Received message: ${command}`);        
+      
         if (this.isRequest(command) && this.isMemeRequest(command)) {
-            logger.info('Message received, sending meme');
+            logger.info(`Message "${command}" received, sending meme`);
             this.emit(this.REQUEST_MEME, message.channel);
         } else {
-            logger.info('Message received, sending generic response');
+            logger.info(`Message "${command}" received, sending generic response`);
             this.emit(this.REPLY, message.channel, command);
         }
     }
