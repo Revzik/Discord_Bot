@@ -5,9 +5,16 @@ require('winston-daily-rotate-file');
 
 const LOG_DIR = __dirname + '../../../../logs';
 
+const TZ = process.env.TZ;
+const timezoned = () => {
+    return new Date().toLocaleString('en-US', {
+        timeZone: TZ
+    });
+}
+
 function createLogger(namespace) {
     const loggerConfig = {
-        'transports': [
+        transports: [
             new winston.transports.Console({
                 level: 'debug'
             }),
@@ -22,11 +29,11 @@ function createLogger(namespace) {
                 symlinkName: 'bot.log'
             })
         ],
-        'format': winston.format.combine(
+        format: winston.format.combine(
             winston.format.label({
                 label: namespace
             }),
-            winston.format.timestamp(),
+            winston.format.timestamp({ format: timezoned }),
             winston.format.printf((info) => {
                 return `${info.timestamp} - [${info.level}]:${info.label}: ${info.message}`;
             })

@@ -12,11 +12,8 @@ require(__dirname + '/services/reply');
 require(__dirname + '/services/meme');
 logger.info('Succesfully configured services!');
 
-// setup bot token
-const TOKEN = process.env.TOKEN;
-require('dotenv').config();
-
 // setup bot and its listeners
+const TOKEN = process.env.TOKEN;
 logger.info('Logging in...');
 bot.login(TOKEN);
 

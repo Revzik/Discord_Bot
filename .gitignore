@@ -110,5 +110,6 @@ tmp/
 .vscode/
 
 docker-compose.yml
+janpat2*
 
 images/
