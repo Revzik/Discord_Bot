@@ -5,10 +5,15 @@ FROM arm32v7/node:14-alpine
 
 WORKDIR /usr/app
 
+RUN apk update && \
+    apk add --no-cache tzdata
+
 COPY package*.json ./
 RUN npm install
 
 COPY src/ src/
+
+COPY images/ images/
 
 ARG TOKEN
 ENV TOKEN=$TOKEN

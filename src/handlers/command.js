@@ -1,10 +1,13 @@
-'use strict';
-
+// this file contains the heart of the bot which is CommandHandler
+// it acts as a message broker and based on the message body
+// it sends an appriopriate response async
 const Emmiter = require('events');
-const config = require(__dirname + '/../config/command.json');
+const config = require(__dirname + '/../config/bot/command.json');
+const logger = require(__dirname + '/../config/log/logger.js').createLogger(__filename);
 
+// main class to deal with incomming messages
 class CommandHandler extends Emmiter {
-
+    
     constructor(config) {
         super();
 
@@ -15,26 +18,31 @@ class CommandHandler extends Emmiter {
     }
     
     reload(config) {
+        logger.info('Loading commands...');
         this.prefix = config.prefix.toLowerCase();
         this.replies = config.replies;
         this.requests = config.requests;
+        logger.info('Successfully loaded commands!');
     }
 
+    // main function which filters out the messages which are not commands
+    // and sends apriopriate response
     processMessage(message) {
         var command = this.filter(message);
         if (command === null) {
             return;
         }
-        
-        if (this.isRequest(command)) {
-            if (this.isMemeRequest(command)) {
-                this.emit(this.REQUEST_MEME, message.channel);
-            }
+      
+        if (this.isRequest(command) && this.isMemeRequest(command)) {
+            logger.info(`Message "${command}" received, sending meme`);
+            this.emit(this.REQUEST_MEME, message.channel);
         } else {
+            logger.info(`Message "${command}" received, sending generic response`);
             this.emit(this.REPLY, message.channel, command);
         }
     }
 
+    // filter the messages which don't begin with bot prefix
     filter(message) {
         var content = message.content.toLowerCase().trim();
         if (message.author.bot || !content.startsWith(this.prefix)) {
@@ -47,6 +55,7 @@ class CommandHandler extends Emmiter {
         return command;
     }
 
+    // helper methods
     isRequest(command) {
         return this.requests['base'].includes(command[0]);
     }
