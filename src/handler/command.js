@@ -2,8 +2,8 @@
 // it acts as a message broker and based on the message body
 // it sends an appriopriate response async
 const Emmiter = require('events');
-const config = require(__dirname + '/../config/bot/command.json');
-const logger = require(__dirname + '/../config/log/logger.js').createLogger(__filename);
+const config = require('@conf/bot/command.json');
+const logger = require('@log/logger').createLogger(__filename);
 
 // main class to deal with incomming messages
 class CommandHandler extends Emmiter {
@@ -50,7 +50,7 @@ class CommandHandler extends Emmiter {
         }
         
         const commandBody = content.slice(this.prefix.length).trim();
-        const command = commandBody.split(" ");
+        const command = commandBody.split(' ');
 
         return command;
     }
