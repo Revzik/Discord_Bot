@@ -5,15 +5,17 @@ const CronJob = require('cron').CronJob;
 const TZ = process.env.TZ;
 const paths = require('@conf/bot/paths.json');
 const schedules = require('@conf/bot/schedules.json');
+const messages = require('@conf/bot/messages.json');
 const listener = require('@handler/command');
 const { loadRandom } = require('@data/image');
 const bot = require('@src/bot');
 const logger = require('@log/logger').createLogger(__filename);
 
-function reload(paths, schedules) {
+function reload(paths, schedules, messages) {
     logger.info('Loading meme service...');
     config = {
         path: __dirname + '/../../' + paths['memeDir'],
+        noImageMessages: messages.noImage,
         schedule: schedules['memeTime'],
         scheduleChannel: schedules['memeChannel']
     }
@@ -42,7 +44,13 @@ function scheduleMeme(schedule, targetChannel) {
 // main functions - for now just from a local directory
 function sendMeme(channel) {
     logger.debug('No online sources, sending local meme');
-    sendMemeLocal(channel);
+    try {
+        sendMemeLocal(channel);
+    } catch(err) {
+        logger.error('Error ocurred when loading image:');
+        logger.error(err);
+        sendNoImageMessage(channel);
+    }
 }
 
 function sendMemeLocal(channel) {
@@ -56,8 +64,13 @@ function sendMemeLocal(channel) {
     });
 }
 
+function sendNoImageMessage(channel) {
+    var message = config.noImageMessages[Math.floor(Math.random() * config.noImageMessages.length)];
+    channel.send(message);
+}
+
 // setup the modules
-config = reload(paths, schedules);
+config = reload(paths, schedules, messages);
 
 listener.on(listener.REQUEST_MEME, sendMeme)
 
