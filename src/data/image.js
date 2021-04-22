@@ -6,6 +6,10 @@ function loadRandom(path) {
     logger.debug('Loading image from disk');
     
     files = fs.readdirSync(path);
+    if (files.length === 0) {
+        throw new Error("No images in local directory!");
+    }
+
     image = files[Math.floor(Math.random() * files.length)];
     exts = image.split('.');
     
