@@ -1,77 +1,142 @@
 // theese functions are used to send meme replies to the channels
 // and send a scheduled meme based on crontab
-const CronJob = require('cron').CronJob;
+const CronJob = require('cron').CronJob
+const gis = require('g-i-s')
 
-const TZ = process.env.TZ;
-const paths = require('@conf/bot/paths.json');
-const schedules = require('@conf/bot/schedules.json');
-const messages = require('@conf/bot/messages.json');
-const listener = require('@handler/command');
-const { loadRandom } = require('@data/image');
-const bot = require('@src/bot');
-const logger = require('@log/logger').createLogger(__filename);
+const TZ = process.env.TZ
+const SUPPORTED_FORMATS = /\.jpg$|\.jpeg$|\.png$|\.webp$|\.gif$/
+const UNSUPPORTED_DOMAINS = ['preview\.redd\.it']
 
-function reload(paths, schedules, messages) {
-    logger.info('Loading meme service...');
+const memeConfig = require('@conf/bot/meme.json')
+const messages = require('@conf/bot/messages.json')
+const listener = require('@handler/command')
+const { loadRandom } = require('@data/image')
+const bot = require('@src/bot')
+const { getRandom } = require('@util/utils')
+const logger = require('@log/logger').createLogger(__filename)
+
+function reload(memeConfig, messages) {
+    logger.info('Loading meme service...')
     config = {
-        path: __dirname + '/../../' + paths['memeDir'],
-        noImageMessages: messages.noImage,
-        schedule: schedules['memeTime'],
-        scheduleChannel: schedules['memeChannel']
+        path: __dirname + '/../../' + memeConfig['localPath'],
+        keys: memeConfig['keys'],
+        schedule: memeConfig['time'],
+        scheduleChannel: memeConfig['channel'],
+        noImageMessages: messages.noImage
     }
-    logger.info('Successfully loaded meme service!');
+    logger.info('Successfully loaded meme service!')
 
-    scheduleMeme(config.schedule, config.scheduleChannel);
+    scheduleMeme(config.schedule, config.scheduleChannel)
 
-    return config;
+    return config
 }
 
 // crontab scheduler
 function scheduleMeme(schedule, targetChannel) {
-    logger.debug(`Scheduling meme to send: ${JSON.stringify(schedule)}`);
+    logger.debug(`Scheduling meme to send: ${JSON.stringify(schedule)}`)
     var cronTime = `${schedule.second} ${schedule.minute} ${schedule.hour} ${schedule.dayOfMonth} ${schedule.month} ${schedule.dayOfWeek}`
 
     var job = new CronJob(cronTime, () => {
-        const channel = bot.channels.cache.find(channel => channel.name === targetChannel);
-        sendMeme(channel);
-    }, timeZone=TZ);
+        const channel = bot.channels.cache.find(channel => channel.name === targetChannel)
+        sendMeme(channel)
+    }, timeZone=TZ)
 
-    job.start();
+    job.start()
 
-    logger.info(`Next meme will be sent at: ${job.nextDate()}`);
+    logger.info(`Next meme will be sent at: ${job.nextDate()}`)
 }
 
-// main functions - for now just from a local directory
-function sendMeme(channel) {
-    logger.debug('No online sources, sending local meme');
+// main function - deals with 
+async function sendMeme(channel) {
+    logger.debug('Looking for memes to send')
     try {
-        sendMemeLocal(channel);
-    } catch(err) {
-        logger.error('Error ocurred when loading image:');
-        logger.error(err);
-        sendNoImageMessage(channel);
+        let url = await getMemeWeb(config.keys)
+        logger.info('Sending remote image')
+        sendMemeWeb(url, channel)
+    } catch (error) {
+        logger.error('Could not find images online!')
+        logger.error(error)
+        try {
+            let imageFile = await getMemeLocal(config.path)
+            logger.info('Sending local image')
+            sendMemeLocal(imageFile, channel)
+        } catch (error) {
+            logger.error('Could not send any images!')
+            logger.error(error)
+            sendNoImageMessage(channel)
+        }
     }
 }
 
-function sendMemeLocal(channel) {
-    image = loadRandom(config.path);
+// functions used to search for memes using google image search and filter results
+function getMemeWeb(keys) {
+    logger.debug(`Fetching random meme from web using keys: ${keys}`)
+    return new Promise((resolve, reject) => {
+        let opts = {
+            searchTerm: getRandom(keys),
+            queryStringAddition: '&tbs=qdr:w',
+            filterOutDomains: UNSUPPORTED_DOMAINS
+        }
+        gis(opts, (error, results) => {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(getRandom(filterResults(results)))
+            }
+        })
+    })
+}
 
+function filterResults(searchResults) {
+    return searchResults
+    .slice(0, 20)
+    .map(entry => {
+        return entry.url.split('?')[0]
+    })
+    .filter(url => {
+        return SUPPORTED_FORMATS.test(url)
+    })
+}
+
+function sendMemeWeb(url, channel) {
+    logger.debug(`Sending meme from ${url}`)
+    channel.send({
+        files: [url]
+    })
+}
+
+// functions used to load backup memes from local directory
+function getMemeLocal(path) {
+    logger.debug(`Loading random image from: ${path}`)
+    return new Promise((resolve, reject) => {
+        var image = loadRandom(path)
+        if (image !== undefined) {
+            resolve(image)
+        } else {
+            reject('Could not find any images locally')
+        }
+    })
+}
+
+function sendMemeLocal(image, channel) {
+    logger.debug(`Sending local meme: ${image}`)
     channel.send({
         files: [{
             attachment: image.path,
             name: image.name
         }]
-    });
+    })
 }
 
+// default text in case all other options fail
 function sendNoImageMessage(channel) {
-    var message = config.noImageMessages[Math.floor(Math.random() * config.noImageMessages.length)];
-    channel.send(message);
+    logger.debug(`Sending random response`)
+    channel.send(getRandom(config.noImageMessages))
 }
 
 // setup the modules
-config = reload(paths, schedules, messages);
+config = reload(memeConfig, messages)
 
 listener.on(listener.REQUEST_MEME, sendMeme)
 
-module.exports = reload;
+module.exports = reload

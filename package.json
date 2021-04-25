@@ -14,7 +14,8 @@
     "@log": "src/log",
     "@data": "src/data",
     "@handler": "src/handler",
-    "@service": "src/service"
+    "@service": "src/service",
+    "@util": "src/util"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
   "dependencies": {
     "cron": "^1.8.2",
     "discord.js": "^12.5.1",
+    "g-i-s": "^2.1.6",
     "link-module-alias": "^1.2.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.2"
