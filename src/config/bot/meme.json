@@ -1,0 +1,18 @@
+{
+    "time": {
+        "month": "*",
+        "dayOfMonth": "*",
+        "dayOfWeek": "*",
+        "hour": "21",
+        "minute": "37",
+        "second": "*/12"
+    },
+    "channel": "ważne-rzeczy",
+    "localPath": "/images",
+    "keys": [
+        "cenzopapa",
+        "2137 wykop",
+        "2137 reddit",
+        "jp2gmd"
+    ]
+}
